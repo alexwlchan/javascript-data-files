@@ -10,10 +10,12 @@ const shape = { "sides": 5, "colour": "red" };
 
 Think of this module as the JSON module, but for JavaScript files.
 
-## API
+## Usage
 
 *   You can read a JavaScript file with `read_js(path, varname)`
 *   You can write a JavaScript file with `write_js(path, value, varname)`
+
+## Installation
 
 ## Why not use JSON files?
 
