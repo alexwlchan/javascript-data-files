@@ -1,0 +1,7 @@
+-e file:.
+
+build
+mypy
+pytest-cov
+ruff
+twine

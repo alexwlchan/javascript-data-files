@@ -1,0 +1,54 @@
+[build-system]
+requires = [
+    "setuptools >= 65",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "alexwlchan-python-js-files"
+description = "Manipulate JavaScript data files from Python"
+readme = "README.md"
+keywords = ["flickr"]
+authors = [
+  {name = "Alex Chan", email = "alex@alexwlchan.net"},
+]
+maintainers = [
+  {name = "Alex Chan", email="alex@alexwlchan.net"},
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.12",
+]
+requires-python = ">=3.12"
+dependencies = []
+dynamic = ["version"]
+
+[project.urls]
+"Homepage" = "https://github.com/alexwlchan/python-js-files"
+"Changelog" = "https://github.com/alexwlchan/python-js-files/blob/main/CHANGELOG.md"
+
+[tool.setuptools.dynamic]
+version = {attr = "javascript.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+nitrate = ["py.typed"]
+
+[tool.coverage.run]
+branch = true
+source = ["javascript", "tests",]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+fail_under = 100
+
+[tool.pytest.ini_options]
+filterwarnings = ["error"]
+
+[tool.mypy]
+mypy_path = "src"
+strict = true
