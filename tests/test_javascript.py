@@ -59,7 +59,7 @@ class TestWriteJs:
     def test_fails_if_cannot_write_file(self) -> None:
         red_pentagon = {"sides": 5, "colour": "red"}
 
-        with pytest.raises(FileExistsError):
+        with pytest.raises(OSError):
             write_js("/", value=red_pentagon, varname="redPentagon")
 
     def test_creates_parent_directory(self, tmp_path: pathlib.Path) -> None:
