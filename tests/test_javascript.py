@@ -2,7 +2,7 @@ import pathlib
 
 import pytest
 
-from javascript import read_js
+from javascript import read_js, write_js
 
 
 class TestReadJs:
@@ -42,3 +42,34 @@ class TestReadJs:
 
         with pytest.raises(ValueError, match="does not end with a trailing semicolon"):
             read_js(js_path, varname="redPentagon")
+
+
+class TestWriteJs:
+    def test_can_write_file(self, tmp_path: pathlib.Path) -> None:
+        js_path = tmp_path / "shape.js"
+        red_pentagon = {"sides": 5, "colour": "red"}
+
+        write_js(js_path, value=red_pentagon, varname="redPentagon")
+
+        assert (
+            js_path.read_text()
+            == 'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
+        )
+
+    def test_fails_if_cannot_write_file(self) -> None:
+        red_pentagon = {"sides": 5, "colour": "red"}
+
+        with pytest.raises(FileExistsError):
+            write_js("/", value=red_pentagon, varname="redPentagon")
+
+    def test_creates_parent_directory(self, tmp_path: pathlib.Path) -> None:
+        js_path = tmp_path / "1/2/3/shape.js"
+        red_pentagon = {"sides": 5, "colour": "red"}
+
+        write_js(js_path, value=red_pentagon, varname="redPentagon")
+
+        assert js_path.exists()
+        assert (
+            js_path.read_text()
+            == 'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
+        )
