@@ -25,7 +25,7 @@ def read_js(p: pathlib.Path | str, *, varname: str) -> typing.Any:
     with open(p) as in_file:
         contents = in_file.read()
 
-    m = re.compile(r"^const %s = " % varname)
+    m = re.compile(r"^(?:const |var )?%s = " % varname)
 
     if not m.match(contents):
         raise ValueError(

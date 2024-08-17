@@ -7,11 +7,19 @@ from javascript import append_to_js_array, read_js, write_js
 
 
 class TestReadJs:
-    def test_can_read_file(self, tmp_path: pathlib.Path) -> None:
+    @pytest.mark.parametrize(
+        "text",
+        [
+            'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n',
+            'var redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n',
+            'redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n',
+            'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};',
+            'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n}',
+        ],
+    )
+    def test_can_read_file(self, tmp_path: pathlib.Path, text: str) -> None:
         js_path = tmp_path / "shape.js"
-        js_path.write_text(
-            'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
-        )
+        js_path.write_text(text)
 
         assert read_js(js_path, varname="redPentagon") == {"sides": 5, "colour": "red"}
 
@@ -36,12 +44,6 @@ class TestReadJs:
             ValueError, match="does not start with JavaScript `const` declaration"
         ):
             read_js(js_path, varname="blueTriangle")
-
-    def test_allows_trailing_semicolon(self, tmp_path: pathlib.Path) -> None:
-        js_path = tmp_path / "shape.js"
-        js_path.write_text('const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n}')
-
-        assert read_js(js_path, varname="redPentagon") == {"sides": 5, "colour": "red"}
 
 
 class TestWriteJs:
