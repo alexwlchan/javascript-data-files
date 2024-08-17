@@ -6,6 +6,11 @@ import pytest
 from javascript import append_to_js_array, read_js, write_js
 
 
+@pytest.fixture
+def js_path(tmp_path: pathlib.Path) -> pathlib.Path:
+    return tmp_path / "data.js"
+
+
 class TestReadJs:
     @pytest.mark.parametrize(
         "text",
@@ -17,8 +22,7 @@ class TestReadJs:
             'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n}',
         ],
     )
-    def test_can_read_file(self, tmp_path: pathlib.Path, text: str) -> None:
-        js_path = tmp_path / "shape.js"
+    def test_can_read_file(self, js_path: pathlib.Path, text: str) -> None:
         js_path.write_text(text)
 
         assert read_js(js_path, varname="redPentagon") == {"sides": 5, "colour": "red"}
@@ -27,15 +31,13 @@ class TestReadJs:
         with pytest.raises(FileNotFoundError):
             read_js("doesnotexist.js", varname="shape")
 
-    def test_non_json_value_is_error(self, tmp_path: pathlib.Path) -> None:
-        js_path = tmp_path / "total.js"
+    def test_non_json_value_is_error(self, js_path: pathlib.Path) -> None:
         js_path.write_text("const sum = 1 + 1 + 1;")
 
         with pytest.raises(ValueError):
             read_js(js_path, varname="sum")
 
-    def test_incorrect_varname_is_error(self, tmp_path: pathlib.Path) -> None:
-        js_path = tmp_path / "shape.js"
+    def test_incorrect_varname_is_error(self, js_path: pathlib.Path) -> None:
         js_path.write_text(
             'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
         )
@@ -47,8 +49,7 @@ class TestReadJs:
 
 
 class TestWriteJs:
-    def test_can_write_file(self, tmp_path: pathlib.Path) -> None:
-        js_path = tmp_path / "shape.js"
+    def test_can_write_file(self, js_path: pathlib.Path) -> None:
         red_pentagon = {"sides": 5, "colour": "red"}
 
         write_js(js_path, value=red_pentagon, varname="redPentagon")
@@ -88,9 +89,7 @@ class TestAppendToArray:
             'const fruit = [\n  "apple",\n  "banana",\n  "coconut"\n]',
         ],
     )
-    def test_can_append_array_value(self, tmp_path: pathlib.Path, text: str) -> None:
-        js_path = tmp_path / "food.js"
-
+    def test_can_append_array_value(self, js_path: pathlib.Path, text: str) -> None:
         js_path.write_text(text)
 
         append_to_js_array(js_path, value="damson")
@@ -101,9 +100,7 @@ class TestAppendToArray:
             "damson",
         ]
 
-    def test_can_mix_types(self, tmp_path: pathlib.Path) -> None:
-        js_path = tmp_path / "food.js"
-
+    def test_can_mix_types(self, js_path: pathlib.Path) -> None:
         write_js(js_path, value=["apple", "banana", "coconut"], varname="fruit")
         append_to_js_array(js_path, value=["damson"])
         assert read_js(js_path, varname="fruit") == [
@@ -113,8 +110,7 @@ class TestAppendToArray:
             ["damson"],
         ]
 
-    def test_error_if_file_doesnt_look_like_array(self, tmp_path: pathlib.Path) -> None:
-        js_path = tmp_path / "shape.js"
+    def test_error_if_file_doesnt_look_like_array(self, js_path: pathlib.Path) -> None:
         red_pentagon = {"sides": 5, "colour": "red"}
 
         write_js(js_path, value=red_pentagon, varname="redPentagon")
@@ -138,16 +134,12 @@ class TestRoundTrip:
         ],
     )
     def test_can_read_and_write_value(
-        self, tmp_path: pathlib.Path, value: typing.Any
+        self, js_path: pathlib.Path, value: typing.Any
     ) -> None:
-        js_path = tmp_path / "testdata.js"
-
         write_js(js_path, value=value, varname="myTestVariable")
         assert read_js(js_path, varname="myTestVariable") == value
 
-    def test_can_append_to_file(self, tmp_path: pathlib.Path) -> None:
-        js_path = tmp_path / "food.js"
-
+    def test_can_append_to_file(self, js_path: pathlib.Path) -> None:
         write_js(js_path, value=["apple", "banana", "coconut"], varname="fruit")
         append_to_js_array(js_path, value="damson")
         assert read_js(js_path, varname="fruit") == [
