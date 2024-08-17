@@ -78,6 +78,29 @@ class TestWriteJs:
 
 
 class TestAppendToArray:
+    @pytest.mark.parametrize(
+        "text",
+        [
+            'const fruit = ["apple", "banana", "coconut"];\n',
+            'const fruit = ["apple","banana", "coconut"];',
+            'const fruit = [\n  "apple",\n  "banana",\n  "coconut"\n];\n',
+            'const fruit = [\n  "apple",\n  "banana",\n  "coconut"\n]',
+            'const fruit = [\n  "apple",\n  "banana",\n  "coconut"\n]',
+        ],
+    )
+    def test_can_append_array_value(self, tmp_path: pathlib.Path, text: str) -> None:
+        js_path = tmp_path / "food.js"
+
+        js_path.write_text(text)
+
+        append_to_js_array(js_path, value="damson")
+        assert read_js(js_path, varname="fruit") == [
+            "apple",
+            "banana",
+            "coconut",
+            "damson",
+        ]
+
     def test_can_mix_types(self, tmp_path: pathlib.Path) -> None:
         js_path = tmp_path / "food.js"
 
