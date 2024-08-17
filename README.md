@@ -14,6 +14,7 @@ Think of this module as the JSON module, but for JavaScript files.
 
 *   You can read a JavaScript file with `read_js(path, varname)`
 *   You can write a JavaScript file with `write_js(path, value, varname)`
+*   You can append an item to a JavaScript array with `append_js_array_value(path, value)`
 
 ## Installation
 

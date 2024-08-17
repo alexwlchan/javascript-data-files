@@ -2,7 +2,7 @@ import pathlib
 
 import pytest
 
-from javascript import read_js, write_js
+from javascript import append_to_js_array, read_js, write_js
 
 
 class TestReadJs:
@@ -72,3 +72,40 @@ class TestWriteJs:
             js_path.read_text()
             == 'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
         )
+
+
+class TestAppendToArray:
+    def test_can_mix_types(self, tmp_path: pathlib.Path) -> None:
+        js_path = tmp_path / "food.js"
+
+        write_js(js_path, value=["apple", "banana", "coconut"], varname="fruit")
+        append_to_js_array(js_path, value=["damson"])
+        assert read_js(js_path, varname="fruit") == [
+            "apple",
+            "banana",
+            "coconut",
+            ["damson"],
+        ]
+
+    def test_error_if_file_doesnt_look_like_array(self, tmp_path: pathlib.Path) -> None:
+        js_path = tmp_path / "shape.js"
+        red_pentagon = {"sides": 5, "colour": "red"}
+
+        write_js(js_path, value=red_pentagon, varname="redPentagon")
+
+        with pytest.raises(ValueError, match="does not look like an array"):
+            append_to_js_array(js_path, value=["yellow"])
+
+
+class TestRoundTrip:
+    def test_can_append_to_file(self, tmp_path: pathlib.Path) -> None:
+        js_path = tmp_path / "food.js"
+
+        write_js(js_path, value=["apple", "banana", "coconut"], varname="fruit")
+        append_to_js_array(js_path, value="damson")
+        assert read_js(js_path, varname="fruit") == [
+            "apple",
+            "banana",
+            "coconut",
+            "damson",
+        ]
