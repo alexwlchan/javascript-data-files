@@ -104,3 +104,54 @@ def append_to_js_array(p: pathlib.Path | str, *, value: typing.Any) -> None:
             return
 
         raise ValueError(f"End of file {p!r} does not look like an array")
+
+
+def append_to_js_object(p: pathlib.Path | str, *, key: str, value: typing.Any) -> None:
+    """
+    Append a single key/value pair to a JSON object in a JavaScript "data file".
+
+    Example:
+
+        >>> write_js('shape.js', value={'colour': 'red', 'sides': 5}, varname='redPentagon')
+        >>> append_to_js_object('shape.js', key='sideLengths', value=[5, 5, 6, 6, 6])
+        >>> read_js('shape.js', varname='redPentagon')
+        {'colour': 'red', 'sides': 5, 'sideLengths': [5, 5, 6, 6, 6]}
+
+    If you have a large file, this is usually faster than reading,
+    appending, and re-writing the entire file.
+
+    """
+    file_size = os.stat(p).st_size
+
+    enc_key = json.dumps(key)
+    enc_value = json.dumps(value)
+
+    json_to_append = f",\n  {enc_key}: {enc_value}\n}};\n".encode("utf8")
+
+    with open(p, "rb+") as out_file:
+        out_file.seek(file_size - 4)
+
+        if out_file.read(4) == b"\n};\n":
+            out_file.seek(file_size - 4)
+            out_file.write(json_to_append)
+            return
+
+        out_file.seek(file_size - 3)
+        if out_file.read(3) in {b"\n};", b"};\n"}:
+            out_file.seek(file_size - 3)
+            out_file.write(json_to_append)
+            return
+
+        out_file.seek(file_size - 2)
+        if out_file.read(2) in {b"};", b"}\n"}:
+            out_file.seek(file_size - 2)
+            out_file.write(json_to_append)
+            return
+
+        out_file.seek(file_size - 1)
+        if out_file.read(1) == b"}":
+            out_file.seek(file_size - 1)
+            out_file.write(json_to_append)
+            return
+
+        raise ValueError(f"End of file {p!r} does not look like an object")
