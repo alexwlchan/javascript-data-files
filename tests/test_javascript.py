@@ -11,6 +11,8 @@ class TestReadJs:
         "text",
         [
             'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n',
+            'var redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n',
+            'redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n',
             'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};',
             'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n}',
         ],
