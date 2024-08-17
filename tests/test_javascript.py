@@ -109,6 +109,7 @@ class TestRoundTrip:
             {"colour": "red", "sides": 5},
             'a string with "double quotes"',
             "this is const myTestVariable",
+            "const myTestVariable = ",
         ],
     )
     def test_can_read_and_write_value(
