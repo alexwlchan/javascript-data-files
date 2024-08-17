@@ -26,6 +26,17 @@ Eventually this will be a pip installable package, once I've done some more test
 
 ## Why not use JSON files?
 
+If you've opening an HTML file from disk, you can load data from a local JavaScript file, for example:
+
+```html
+<script src="file://users/alexwlchan/repos/python-js-files/data.js"></script>
+```
+
+This is the only way to load data from an external file from an HTML file you've opened locally -- you can't do this with a JSON file, for example.
+
+I have a lot of HTML files and local sites I build with an HTML viewer and metadata in a JavaScript file.
+The convenience of this approach outweighs the mild annoyance of having to store data in JavaScript, not JSON.
+
 ## License
 
 MIT.
