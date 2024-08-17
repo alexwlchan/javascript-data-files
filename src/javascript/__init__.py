@@ -1,6 +1,7 @@
 import json
 import os
 import pathlib
+import re
 import typing
 
 
@@ -24,12 +25,14 @@ def read_js(p: pathlib.Path | str, *, varname: str) -> typing.Any:
     with open(p) as in_file:
         contents = in_file.read()
 
-    if not contents.startswith(f"const {varname} = "):
+    m = re.compile(r"^const %s = " % varname)
+
+    if not m.match(contents):
         raise ValueError(
             f"File {p} does not start with JavaScript `const` declaration!"
         )
 
-    json_string = contents.replace(f"const {varname} = ", "").rstrip().rstrip(";")
+    json_string = m.sub(repl="", string=contents).rstrip().rstrip(";")
 
     return json.loads(json_string)
 

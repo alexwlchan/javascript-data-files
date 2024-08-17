@@ -6,9 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "alexwlchan-python-js-files"
-description = "Manipulate JavaScript data files from Python"
+description = "Work with JSON which is stored as a value in a JavaScript file"
 readme = "README.md"
-keywords = ["flickr"]
 authors = [
   {name = "Alex Chan", email = "alex@alexwlchan.net"},
 ]
