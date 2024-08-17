@@ -83,5 +83,24 @@ def append_to_js_array(p: pathlib.Path | str, *, value: typing.Any) -> None:
         if out_file.read(4) == b"\n];\n":
             out_file.seek(file_size - 4)
             out_file.write(json_to_append)
-        else:
-            raise ValueError(f"End of file {p!r} does not look like an array")
+            return
+
+        out_file.seek(file_size - 3)
+        if out_file.read(3) in {b"\n];", b"];\n"}:
+            out_file.seek(file_size - 3)
+            out_file.write(json_to_append)
+            return
+
+        out_file.seek(file_size - 2)
+        if out_file.read(2) in {b"];", b"]\n"}:
+            out_file.seek(file_size - 2)
+            out_file.write(json_to_append)
+            return
+
+        out_file.seek(file_size - 1)
+        if out_file.read(1) == b"]":
+            out_file.seek(file_size - 1)
+            out_file.write(json_to_append)
+            return
+
+        raise ValueError(f"End of file {p!r} does not look like an array")
