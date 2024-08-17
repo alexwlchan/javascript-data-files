@@ -1,4 +1,5 @@
 import json
+import os
 import pathlib
 import typing
 
@@ -52,3 +53,32 @@ def write_js(p: pathlib.Path | str, *, value: typing.Any, varname: str) -> None:
 
     with open(p, "w") as out_file:
         out_file.write(js_string)
+
+
+def append_to_js_array(p: pathlib.Path | str, *, value: typing.Any) -> None:
+    """
+    Append a single value to an array in a JavaScript "data file".
+
+    Example:
+
+        >>> write_js('food.js', value=['apple', 'banana', 'coconut'], varname='fruit')
+        >>> append_to_js_array('food.js', value='damson')
+        >>> read_js('food.js', varname='fruit')
+        ['apple', 'banana', 'coconut', 'damson']
+
+    If you have a large file, this is usually faster than reading,
+    appending, and re-writing the entire file.
+
+    """
+    file_size = os.stat(p).st_size
+
+    json_to_append = b",\n" + json.dumps(value).encode("utf8") + b"\n];\n"
+
+    with open(p, "rb+") as out_file:
+        out_file.seek(file_size - 4)
+
+        if out_file.read(4) == b"\n];\n":
+            out_file.seek(file_size - 4)
+            out_file.write(json_to_append)
+        else:
+            raise ValueError(f"End of file {p!r} does not look like an array")
