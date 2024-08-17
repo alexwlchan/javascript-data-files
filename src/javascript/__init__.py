@@ -28,9 +28,6 @@ def read_js(p: pathlib.Path | str, *, varname: str) -> typing.Any:
             f"File {p} does not start with JavaScript `const` declaration!"
         )
 
-    if not contents.rstrip().endswith(";"):
-        raise ValueError(f"File {p} does not end with a trailing semicolon!")
-
     json_string = contents.replace(f"const {varname} = ", "").rstrip().rstrip(";")
 
     return json.loads(json_string)

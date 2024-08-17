@@ -36,12 +36,11 @@ class TestReadJs:
         ):
             read_js(js_path, varname="blueTriangle")
 
-    def test_no_trailing_semicolon_is_error(self, tmp_path: pathlib.Path) -> None:
+    def test_allows_trailing_semicolon(self, tmp_path: pathlib.Path) -> None:
         js_path = tmp_path / "shape.js"
         js_path.write_text('const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n}')
 
-        with pytest.raises(ValueError, match="does not end with a trailing semicolon"):
-            read_js(js_path, varname="redPentagon")
+        assert read_js(js_path, varname="redPentagon") == {"sides": 5, "colour": "red"}
 
 
 class TestWriteJs:
