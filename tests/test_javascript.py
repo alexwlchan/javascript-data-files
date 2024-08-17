@@ -3,7 +3,7 @@ import typing
 
 import pytest
 
-from javascript import append_to_js_array, read_js, write_js
+from javascript import append_to_js_array, append_to_js_object, read_js, write_js
 
 
 @pytest.fixture
@@ -85,7 +85,7 @@ class TestAppendToArray:
             'const fruit = ["apple", "banana", "coconut"];\n',
             'const fruit = ["apple","banana", "coconut"];',
             'const fruit = [\n  "apple",\n  "banana",\n  "coconut"\n];\n',
-            'const fruit = [\n  "apple",\n  "banana",\n  "coconut"\n]',
+            'const fruit = [\n  "apple",\n  "banana",\n  "coconut"\n];',
             'const fruit = [\n  "apple",\n  "banana",\n  "coconut"\n]',
         ],
     )
@@ -117,6 +117,36 @@ class TestAppendToArray:
 
         with pytest.raises(ValueError, match="does not look like an array"):
             append_to_js_array(js_path, value=["yellow"])
+
+
+class TestAppendToObject:
+    @pytest.mark.parametrize(
+        "text",
+        [
+            'const redPentagon = {"colour": "red", "sides": 5};\n',
+            'const redPentagon = {"colour": "red", "sides": 5};',
+            'const redPentagon = {\n  "colour": "red",\n  "sides": 5\n};\n',
+            'const redPentagon = {\n  "colour": "red",\n  "sides": 5\n};',
+            'const redPentagon = {\n  "colour": "red",\n  "sides": 5\n}',
+        ],
+    )
+    def test_can_append_array_value(self, js_path: pathlib.Path, text: str) -> None:
+        js_path.write_text(text)
+
+        append_to_js_object(js_path, key="sideLengths", value=[5, 5, 6, 6, 6])
+        assert read_js(js_path, varname="redPentagon") == {
+            "colour": "red",
+            "sides": 5,
+            "sideLengths": [5, 5, 6, 6, 6],
+        }
+
+    def test_error_if_file_doesnt_look_like_object(self, js_path: pathlib.Path) -> None:
+        shapes = ["apple", "banana", "cherry"]
+
+        write_js(js_path, value=shapes, varname="fruit")
+
+        with pytest.raises(ValueError, match="does not look like an object"):
+            append_to_js_object(js_path, key="sideLengths", value=[5, 5, 6, 6, 6])
 
 
 class TestRoundTrip:
