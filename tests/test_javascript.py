@@ -1,4 +1,5 @@
 import pathlib
+import typing
 
 import pytest
 
@@ -98,6 +99,26 @@ class TestAppendToArray:
 
 
 class TestRoundTrip:
+    @pytest.mark.parametrize(
+        "value",
+        [
+            "hello world",
+            5,
+            None,
+            ["1", "2", "3"],
+            {"colour": "red", "sides": 5},
+            'a string with "double quotes"',
+            "this is const myTestVariable",
+        ],
+    )
+    def test_can_read_and_write_value(
+        self, tmp_path: pathlib.Path, value: typing.Any
+    ) -> None:
+        js_path = tmp_path / "testdata.js"
+
+        write_js(js_path, value=value, varname="myTestVariable")
+        assert read_js(js_path, varname="myTestVariable") == value
+
     def test_can_append_to_file(self, tmp_path: pathlib.Path) -> None:
         js_path = tmp_path / "food.js"
 
