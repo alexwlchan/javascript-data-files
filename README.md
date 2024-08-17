@@ -19,6 +19,11 @@ Think of this module as the JSON module, but for JavaScript files.
 
 ## Installation
 
+Copy the file `src/javascript` folder into your project.
+You probably want to copy the tests as well.
+
+Eventually this will be a pip installable package, once I've done some more testing (see [issue #3](https://github.com/alexwlchan/python-js-files/issues/3)).
+
 ## Why not use JSON files?
 
 ## License
