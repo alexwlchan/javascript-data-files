@@ -1,5 +1,4 @@
 import json
-import os
 import pathlib
 import re
 import typing
@@ -22,8 +21,9 @@ def read_js(p: pathlib.Path | str, *, varname: str) -> typing.Any:
         {'sides': 5, 'colour': 'red'}
 
     """
-    with open(p) as in_file:
-        contents = in_file.read()
+    p = pathlib.Path(p)
+
+    contents = p.read_text()
 
     m = re.compile(r"^(?:const |var )?%s = " % varname)
 
@@ -49,13 +49,13 @@ def write_js(p: pathlib.Path | str, *, value: typing.Any, varname: str) -> None:
         'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
 
     """
+    p = pathlib.Path(p)
+
     json_string = json.dumps(value, indent=2)
     js_string = f"const {varname} = {json_string};\n"
 
-    pathlib.Path(p).parent.mkdir(exist_ok=True, parents=True)
-
-    with open(p, "w") as out_file:
-        out_file.write(js_string)
+    p.parent.mkdir(exist_ok=True, parents=True)
+    p.write_text(js_string)
 
 
 def append_to_js_array(p: pathlib.Path | str, *, value: typing.Any) -> None:
@@ -73,7 +73,8 @@ def append_to_js_array(p: pathlib.Path | str, *, value: typing.Any) -> None:
     appending, and re-writing the entire file.
 
     """
-    file_size = os.stat(p).st_size
+    p = pathlib.Path(p)
+    file_size = p.stat().st_size
 
     json_to_append = b",\n" + json.dumps(value).encode("utf8") + b"\n];\n"
 
@@ -121,7 +122,8 @@ def append_to_js_object(p: pathlib.Path | str, *, key: str, value: typing.Any) -
     appending, and re-writing the entire file.
 
     """
-    file_size = os.stat(p).st_size
+    p = pathlib.Path(p)
+    file_size = p.stat().st_size
 
     enc_key = json.dumps(key)
     enc_value = json.dumps(value)
