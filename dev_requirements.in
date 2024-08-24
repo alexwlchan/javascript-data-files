@@ -1,6 +1,7 @@
 -e file:.
 
 build
+interrogate
 mypy
 pytest-cov
 ruff

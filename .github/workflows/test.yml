@@ -29,6 +29,9 @@ jobs:
         ruff check .
         ruff format --check .
 
+    - name: Check docstrings
+      run: interrogate -vv
+
     - name: Check types
       run: mypy src tests
     - name: Run tests
