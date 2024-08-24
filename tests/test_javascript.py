@@ -126,6 +126,20 @@ class TestAppendToArray:
         with pytest.raises(ValueError, match="does not look like an array"):
             append_to_js_array(js_path, value=["yellow"])
 
+    def test_error_if_path_doesnt_exist(self, js_path: pathlib.Path) -> None:
+        """
+        Appending to the path of a non-existent file throws FileNotFoundError.
+        """
+        with pytest.raises(FileNotFoundError):
+            append_to_js_array(js_path, value="alex")
+
+    def test_error_if_path_is_dir(self, tmp_path: pathlib.Path) -> None:
+        """
+        Appending to a path which is a directory throws IsADirectoryError.
+        """
+        with pytest.raises(IsADirectoryError):
+            append_to_js_array(tmp_path, value="alex")
+
 
 class TestAppendToObject:
     @pytest.mark.parametrize(
@@ -155,6 +169,20 @@ class TestAppendToObject:
 
         with pytest.raises(ValueError, match="does not look like an object"):
             append_to_js_object(js_path, key="sideLengths", value=[5, 5, 6, 6, 6])
+
+    def test_error_if_path_doesnt_exist(self, js_path: pathlib.Path) -> None:
+        """
+        Appending to the path of a non-existent file throws FileNotFoundError.
+        """
+        with pytest.raises(FileNotFoundError):
+            append_to_js_object(js_path, key="name", value="alex")
+
+    def test_error_if_path_is_dir(self, tmp_path: pathlib.Path) -> None:
+        """
+        Appending to a path which is a directory throws IsADirectoryError.
+        """
+        with pytest.raises(IsADirectoryError):
+            append_to_js_object(tmp_path, key="name", value="alex")
 
 
 class TestRoundTrip:
