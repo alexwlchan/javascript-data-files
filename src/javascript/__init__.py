@@ -1,3 +1,16 @@
+"""
+This is a collection of Python functions for manipulating JavaScript
+"data files" -- that is, JavaScript files that define a single variable
+with a JSON value.
+
+This is an example of a JavaScript data file:
+
+    const shape = { "sides": 5, "colour": "red" };
+
+Think of this like the JSON module, but for JavaScript files.
+
+"""
+
 import json
 import pathlib
 import re
