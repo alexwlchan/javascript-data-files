@@ -1,5 +1,4 @@
 import json
-import os
 import pathlib
 import re
 import typing
@@ -8,7 +7,7 @@ import typing
 __version__ = "0.0.1"
 
 
-def read_js(p: pathlib.Path | str, *, varname: str) -> typing.Any:
+def read_js(p: pathlib.Path, *, varname: str) -> typing.Any:
     """
     Read a JavaScript "data file".
 
@@ -22,8 +21,7 @@ def read_js(p: pathlib.Path | str, *, varname: str) -> typing.Any:
         {'sides': 5, 'colour': 'red'}
 
     """
-    with open(p) as in_file:
-        contents = in_file.read()
+    contents = p.read_text()
 
     m = re.compile(r"^(?:const |var )?%s = " % varname)
 
@@ -37,7 +35,7 @@ def read_js(p: pathlib.Path | str, *, varname: str) -> typing.Any:
     return json.loads(json_string)
 
 
-def write_js(p: pathlib.Path | str, *, value: typing.Any, varname: str) -> None:
+def write_js(p: pathlib.Path, *, value: typing.Any, varname: str) -> None:
     """
     Write a JavaScript "data file".
 
@@ -52,13 +50,11 @@ def write_js(p: pathlib.Path | str, *, value: typing.Any, varname: str) -> None:
     json_string = json.dumps(value, indent=2)
     js_string = f"const {varname} = {json_string};\n"
 
-    pathlib.Path(p).parent.mkdir(exist_ok=True, parents=True)
-
-    with open(p, "w") as out_file:
-        out_file.write(js_string)
+    p.parent.mkdir(exist_ok=True, parents=True)
+    p.write_text(js_string)
 
 
-def append_to_js_array(p: pathlib.Path | str, *, value: typing.Any) -> None:
+def append_to_js_array(p: pathlib.Path, *, value: typing.Any) -> None:
     """
     Append a single value to an array in a JavaScript "data file".
 
@@ -73,7 +69,7 @@ def append_to_js_array(p: pathlib.Path | str, *, value: typing.Any) -> None:
     appending, and re-writing the entire file.
 
     """
-    file_size = os.stat(p).st_size
+    file_size = p.stat().st_size
 
     json_to_append = b",\n" + json.dumps(value).encode("utf8") + b"\n];\n"
 
@@ -106,7 +102,7 @@ def append_to_js_array(p: pathlib.Path | str, *, value: typing.Any) -> None:
         raise ValueError(f"End of file {p!r} does not look like an array")
 
 
-def append_to_js_object(p: pathlib.Path | str, *, key: str, value: typing.Any) -> None:
+def append_to_js_object(p: pathlib.Path, *, key: str, value: typing.Any) -> None:
     """
     Append a single key/value pair to a JSON object in a JavaScript "data file".
 
@@ -121,7 +117,7 @@ def append_to_js_object(p: pathlib.Path | str, *, key: str, value: typing.Any) -
     appending, and re-writing the entire file.
 
     """
-    file_size = os.stat(p).st_size
+    file_size = p.stat().st_size
 
     enc_key = json.dumps(key)
     enc_value = json.dumps(value)

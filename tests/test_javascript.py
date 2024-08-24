@@ -28,8 +28,10 @@ class TestReadJs:
         assert read_js(js_path, varname="redPentagon") == {"sides": 5, "colour": "red"}
 
     def test_non_existent_file_is_error(self) -> None:
+        p = pathlib.Path("doesnotexist.js")
+
         with pytest.raises(FileNotFoundError):
-            read_js("doesnotexist.js", varname="shape")
+            read_js(p, varname="shape")
 
     def test_non_json_value_is_error(self, js_path: pathlib.Path) -> None:
         js_path.write_text("const sum = 1 + 1 + 1;")
@@ -62,8 +64,10 @@ class TestWriteJs:
     def test_fails_if_cannot_write_file(self) -> None:
         red_pentagon = {"sides": 5, "colour": "red"}
 
+        p = pathlib.Path("/")
+
         with pytest.raises(OSError):
-            write_js("/", value=red_pentagon, varname="redPentagon")
+            write_js(p, value=red_pentagon, varname="redPentagon")
 
     def test_creates_parent_directory(self, tmp_path: pathlib.Path) -> None:
         js_path = tmp_path / "1/2/3/shape.js"
