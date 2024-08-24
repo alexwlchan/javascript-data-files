@@ -15,6 +15,7 @@ import json
 import pathlib
 import re
 import typing
+import uuid
 
 
 __version__ = "0.0.1"
@@ -71,7 +72,23 @@ def write_js(p: pathlib.Path | str, *, value: typing.Any, varname: str) -> None:
     js_string = f"const {varname} = {json_string};\n"
 
     p.parent.mkdir(exist_ok=True, parents=True)
-    p.write_text(js_string)
+
+    # Write to a temporary file first, then rename this into place.
+    #
+    # This gives us pseudo-atomic writes -- it's probably not perfect, but
+    # it avoids situations where:
+    #
+    #   * Somebody tries to read the file, and it contains a partial JS string
+    #   * The write is interrupted, and the file is left empty
+    #
+    # Both of which have happened!  Because I often use this running on
+    # files on a semi-slow external hard drive, and sometimes things break.
+    #
+    # The UUID is probably overkill because it would be very unusual for
+    # me to have multiple, concurrent writes going on, but it doesn't hurt.
+    tmp_p = p.with_suffix(f".{uuid.uuid4()}.js.tmp")
+    tmp_p.write_text(js_string)
+    tmp_p.rename(p)
 
 
 def append_to_js_array(p: pathlib.Path | str, *, value: typing.Any) -> None:
