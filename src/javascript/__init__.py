@@ -51,6 +51,9 @@ def write_js(p: pathlib.Path | str, *, value: typing.Any, varname: str) -> None:
     """
     p = pathlib.Path(p)
 
+    if p.is_dir():
+        raise IsADirectoryError(p)
+
     json_string = json.dumps(value, indent=2)
     js_string = f"const {varname} = {json_string};\n"
 
