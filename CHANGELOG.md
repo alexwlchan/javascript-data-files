@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.0.1 - 2024-08-26
+
+When you call `append_to_js_array()` or `append_to_js_object()`, previously the new value would all be smushed onto one line.
+Now it's written with 2 spaces of indentation, to match `write_js()`.
+
 ## v1.0.0 - 2024-08-24
 
 Initial release.  This includes four functions:

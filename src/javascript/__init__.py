@@ -19,7 +19,7 @@ import typing
 import uuid
 
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 
 def read_js(p: pathlib.Path | str, *, varname: str) -> typing.Any:
