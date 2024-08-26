@@ -251,6 +251,21 @@ class TestAppendToObject:
             "sideLengths": [1, 2, 3, 4, 5],
         }
 
+    def test_indentation_is_consistent(self, tmp_path: pathlib.Path) -> None:
+        """
+        If you append to an object, the file looks as if you'd read and rewritten
+        the whole thing with ``write_js()``.
+        """
+        js_path1 = tmp_path / "data1.js"
+        js_path2 = tmp_path / "data2.js"
+
+        write_js(js_path1, varname="shape", value={"colour": "red"})
+        append_to_js_object(js_path1, key="sides", value=[1, 2, 3])
+
+        write_js(js_path2, varname="shape", value={"colour": "red", "sides": [1, 2, 3]})
+
+        assert js_path1.read_text() == js_path2.read_text()
+
     def test_error_if_file_doesnt_look_like_object(self, js_path: pathlib.Path) -> None:
         """
         Appending to a file which doesn't contain a JSON object throws
@@ -323,3 +338,18 @@ class TestRoundTrip:
             "coconut",
             "damson",
         ]
+
+    def test_indentation_is_consistent(self, tmp_path: pathlib.Path) -> None:
+        """
+        If you append to an array, the file looks as if you'd read and rewritten
+        the whole thing with ``write_js()``.
+        """
+        js_path1 = tmp_path / "data1.js"
+        js_path2 = tmp_path / "data2.js"
+
+        write_js(js_path1, varname="numbers", value=[1, 2, 3])
+        append_to_js_array(js_path1, value=[4, 5, 6])
+
+        write_js(js_path2, varname="numbers", value=[1, 2, 3, [4, 5, 6]])
+
+        assert js_path1.read_text() == js_path2.read_text()

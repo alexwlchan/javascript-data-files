@@ -14,6 +14,7 @@ Think of this like the JSON module, but for JavaScript files.
 import json
 import pathlib
 import re
+import textwrap
 import typing
 import uuid
 
@@ -109,7 +110,11 @@ def append_to_js_array(p: pathlib.Path | str, *, value: typing.Any) -> None:
     p = pathlib.Path(p)
     file_size = p.stat().st_size
 
-    json_to_append = b",\n" + json.dumps(value).encode("utf8") + b"\n];\n"
+    json_to_append = (
+        b",\n"
+        + textwrap.indent(json.dumps(value, indent=2), prefix="  ").encode("utf8")
+        + b"\n];\n"
+    )
 
     with open(p, "rb+") as out_file:
         out_file.seek(file_size - 4)
@@ -159,7 +164,7 @@ def append_to_js_object(p: pathlib.Path | str, *, key: str, value: typing.Any) -
     file_size = p.stat().st_size
 
     enc_key = json.dumps(key)
-    enc_value = json.dumps(value)
+    enc_value = textwrap.indent(json.dumps(value, indent=2), prefix="  ").lstrip()
 
     json_to_append = f",\n  {enc_key}: {enc_value}\n}};\n".encode("utf8")
 
