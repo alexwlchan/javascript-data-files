@@ -90,7 +90,7 @@ def write_js(p: pathlib.Path | str, *, value: typing.Any, varname: str) -> None:
     tmp_p = p.with_suffix(f".{uuid.uuid4()}.js.tmp")
 
     with tmp_p.open("x") as out_file:
-        out_file.write_text(js_string)
+        out_file.write(js_string)
 
     tmp_p.rename(p)
 
