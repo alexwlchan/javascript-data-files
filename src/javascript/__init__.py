@@ -88,7 +88,10 @@ def write_js(p: pathlib.Path | str, *, value: typing.Any, varname: str) -> None:
     # The UUID is probably overkill because it would be very unusual for
     # me to have multiple, concurrent writes going on, but it doesn't hurt.
     tmp_p = p.with_suffix(f".{uuid.uuid4()}.js.tmp")
-    tmp_p.write_text(js_string)
+
+    with tmp_p.open("x") as out_file:
+        out_file.write_text(js_string)
+
     tmp_p.rename(p)
 
 
