@@ -27,7 +27,7 @@ You have two options:
 2.  Install the package using pip:
 
     ```console
-    $ pip install alexwlchan-python-js-files
+    $ pip install javascript-data-files
     ```
 
 ## Why not use JSON files?
@@ -35,7 +35,7 @@ You have two options:
 If you've opening an HTML file from disk, you can load data from a local JavaScript file, for example:
 
 ```html
-<script src="file://users/alexwlchan/repos/python-js-files/data.js"></script>
+<script src="file://users/alexwlchan/repos/javascript-data-files/data.js"></script>
 ```
 
 This is the only way to load data from an external file from an HTML file you've opened locally -- you can't do this with a JSON file, for example.
