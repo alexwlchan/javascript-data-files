@@ -5,7 +5,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "alexwlchan-python-js-files"
+name = "javascript_data_files"
 description = "Work with JSON which is stored as a value in a JavaScript file"
 readme = "README.md"
 authors = [
@@ -28,7 +28,7 @@ dynamic = ["version"]
 "Changelog" = "https://github.com/alexwlchan/python-js-files/blob/main/CHANGELOG.md"
 
 [tool.setuptools.dynamic]
-version = {attr = "javascript.__version__"}
+version = {attr = "javascript_data_files.__version__"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -38,7 +38,7 @@ nitrate = ["py.typed"]
 
 [tool.coverage.run]
 branch = true
-source = ["javascript", "tests",]
+source = ["javascript_data_files", "tests",]
 
 [tool.coverage.report]
 show_missing = true

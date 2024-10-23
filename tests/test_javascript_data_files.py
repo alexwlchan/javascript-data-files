@@ -7,7 +7,12 @@ import typing
 
 import pytest
 
-from javascript import append_to_js_array, append_to_js_object, read_js, write_js
+from javascript_data_files import (
+    append_to_js_array,
+    append_to_js_object,
+    read_js,
+    write_js,
+)
 
 
 @pytest.fixture
