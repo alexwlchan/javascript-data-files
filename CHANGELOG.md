@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## v1.1.0 - 2025-01-10
+
+You can now call `write_js()` with a file-like object.
+This can be text I/O or as binary I/O.
+
+This gives you more control over how the file is written -- for example, you can open the file in "exclusive creation" mode to prevent overwriting an existing file:
+
+```python
+with open("shape.js", "x") as out_file:
+    write_js(
+        out_file,
+        value={"sides": 5, "colour": "red"},
+        varname="redPentagon"
+    )
+```
+
 ## v1.0.1 - 2024-08-26
 
 When you call `append_to_js_array()` or `append_to_js_object()`, previously the new value would all be smushed onto one line.
