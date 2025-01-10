@@ -19,6 +19,8 @@ import textwrap
 import typing
 import uuid
 
+from .encoder import encode_as_js
+
 
 __version__ = "1.1.0"
 
@@ -53,16 +55,6 @@ def read_js(p: pathlib.Path | str, *, varname: str) -> typing.Any:
     return json.loads(json_string)
 
 
-def _create_js_string(value: typing.Any, varname: str) -> str:
-    """
-    Create a JavaScript string to write to a file.
-    """
-    json_string = json.dumps(value, indent=2)
-    js_string = f"const {varname} = {json_string};\n"
-
-    return js_string
-
-
 def write_js(
     p: pathlib.Path | str | io.TextIOBase | io.BufferedIOBase,
     *,
@@ -82,7 +74,7 @@ def write_js(
         'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
 
     """
-    js_string = _create_js_string(value, varname)
+    js_string = encode_as_js(value, varname)
 
     if isinstance(p, io.TextIOBase):
         p.write(js_string)
