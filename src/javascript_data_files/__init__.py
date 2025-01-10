@@ -19,8 +19,10 @@ import textwrap
 import typing
 import uuid
 
+from .encoder import encode_as_js, encode_as_json
 
-__version__ = "1.1.0"
+
+__version__ = "1.1.1"
 
 
 def read_js(p: pathlib.Path | str, *, varname: str) -> typing.Any:
@@ -53,16 +55,6 @@ def read_js(p: pathlib.Path | str, *, varname: str) -> typing.Any:
     return json.loads(json_string)
 
 
-def _create_js_string(value: typing.Any, varname: str) -> str:
-    """
-    Create a JavaScript string to write to a file.
-    """
-    json_string = json.dumps(value, indent=2)
-    js_string = f"const {varname} = {json_string};\n"
-
-    return js_string
-
-
 def write_js(
     p: pathlib.Path | str | io.TextIOBase | io.BufferedIOBase,
     *,
@@ -82,7 +74,7 @@ def write_js(
         'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
 
     """
-    js_string = _create_js_string(value, varname)
+    js_string = encode_as_js(value, varname)
 
     if isinstance(p, io.TextIOBase):
         p.write(js_string)
@@ -139,7 +131,7 @@ def append_to_js_array(p: pathlib.Path | str, *, value: typing.Any) -> None:
 
     json_to_append = (
         b",\n"
-        + textwrap.indent(json.dumps(value, indent=2), prefix="  ").encode("utf8")
+        + textwrap.indent(encode_as_json(value), prefix="  ").encode("utf8")
         + b"\n];\n"
     )
 
@@ -191,7 +183,7 @@ def append_to_js_object(p: pathlib.Path | str, *, key: str, value: typing.Any) -
     file_size = p.stat().st_size
 
     enc_key = json.dumps(key)
-    enc_value = textwrap.indent(json.dumps(value, indent=2), prefix="  ").lstrip()
+    enc_value = textwrap.indent(encode_as_json(value), prefix="  ").lstrip()
 
     json_to_append = f",\n  {enc_key}: {enc_value}\n}};\n".encode("utf8")
 

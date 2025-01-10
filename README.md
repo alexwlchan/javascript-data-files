@@ -10,6 +10,8 @@ const shape = { "sides": 5, "colour": "red" };
 
 Think of this module as the JSON module, but for JavaScript files.
 
+These data files are meant to be both human- and machine-readable.
+
 ## Usage
 
 *   You can read a JavaScript file with `read_js(path, varname)`

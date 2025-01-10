@@ -1,5 +1,28 @@
 # CHANGELOG
 
+## v1.1.1
+
+Tweak the way the JavaScript is encoded to make it slightly more compact and readable -- in particular, short lists will now be encoded as a single line, rather than split across multiple lines.
+
+Before:
+
+```json
+[
+  1,
+  2,
+  3
+]
+```
+
+After:
+
+```json
+[1, 2, 3]
+```
+
+The value is the same but should be more readable.
+This opens the door to more readability improvements in the future.
+
 ## v1.1.0 - 2025-01-10
 
 You can now call `write_js()` with a file-like object.
