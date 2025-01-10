@@ -76,11 +76,16 @@ def write_js(
     """
     js_string = encode_as_js(value, varname)
 
+    # If we're writing to a file-like object, we can write the JS string
+    # directly to the object.
     if isinstance(p, io.TextIOBase):
         p.write(js_string)
     elif isinstance(p, io.BufferedIOBase):
         p.write(js_string.encode("utf8"))
-    elif isinstance(p, pathlib.Path) or isinstance(p, str):
+    
+    # If we're writing to a path-like object, we need to open the file
+    # before writing to it.
+    elif isinstance(p, (pathlib.Path, str)):
         p = pathlib.Path(p)
 
         if p.is_dir():
@@ -107,6 +112,9 @@ def write_js(
             out_file.write(js_string)
 
         tmp_p.rename(p)
+    
+    # If we've been asked to write to any other sort of object, something
+    # has gone wrong.  Throw an error.
     else:
         raise TypeError(f"Cannot write JavaScript to {type(p)}!")
 
