@@ -1,4 +1,4 @@
-# python-js-files
+# javascript-data-files
 
 This is a collection of Python functions for manipulating JavaScript "data files" -- that is, JavaScript files that define a single variable with a JSON value.
 
