@@ -2,6 +2,7 @@
 Tests for the ``javascript`` module.
 """
 
+import io
 import pathlib
 import typing
 
@@ -111,6 +112,124 @@ class TestWriteJs:
             js_path.read_text()
             == 'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
         )
+
+    def test_can_write_to_str(self, tmp_path: pathlib.Path) -> None:
+        """
+        It can write to a path passed as a ``str``.
+        """
+        red_pentagon = {"sides": 5, "colour": "red"}
+
+        js_path = tmp_path / "shape.js"
+
+        write_js(p=str(js_path), value=red_pentagon, varname="redPentagon")
+
+        assert (
+            js_path.read_text()
+            == 'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
+        )
+
+    def test_can_write_to_path(self, tmp_path: pathlib.Path) -> None:
+        """
+        It can write to a path passed as a ``pathlib.Path``.
+        """
+        red_pentagon = {"sides": 5, "colour": "red"}
+
+        js_path = tmp_path / "shape.js"
+
+        write_js(js_path, value=red_pentagon, varname="redPentagon")
+
+        assert (
+            js_path.read_text()
+            == 'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
+        )
+
+    def test_can_write_to_file(self, tmp_path: pathlib.Path) -> None:
+        """
+        It can write to a file.
+        """
+        red_pentagon = {"sides": 5, "colour": "red"}
+
+        js_path = tmp_path / "shape.js"
+
+        with open(js_path, "w") as out_file:
+            write_js(out_file, value=red_pentagon, varname="redPentagon")
+
+        assert (
+            js_path.read_text()
+            == 'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
+        )
+
+    def test_can_write_to_binary_file(self, tmp_path: pathlib.Path) -> None:
+        """
+        It can write to a file opened in binary mode.
+        """
+        red_pentagon = {"sides": 5, "colour": "red"}
+
+        js_path = tmp_path / "shape.js"
+
+        with open(js_path, "wb") as out_file:
+            write_js(out_file, value=red_pentagon, varname="redPentagon")
+
+        assert (
+            js_path.read_text()
+            == 'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
+        )
+
+    def test_can_write_to_string_buffer(self) -> None:
+        """
+        It can write to a string buffer.
+        """
+        red_pentagon = {"sides": 5, "colour": "red"}
+
+        string_buffer = io.StringIO()
+
+        write_js(string_buffer, value=red_pentagon, varname="redPentagon")
+
+        assert (
+            string_buffer.getvalue()
+            == 'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
+        )
+
+    def test_can_write_to_bytes_buffer(self) -> None:
+        """
+        It can write to a binary buffer.
+        """
+        red_pentagon = {"sides": 5, "colour": "red"}
+
+        bytes_buffer = io.BytesIO()
+
+        write_js(bytes_buffer, value=red_pentagon, varname="redPentagon")
+
+        assert (
+            bytes_buffer.getvalue()
+            == b'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
+        )
+
+    def test_fails_if_file_is_read_only(self, tmp_path: pathlib.Path) -> None:
+        """
+        It cannot write to a file open in read-only mode.
+        """
+        red_pentagon = {"sides": 5, "colour": "red"}
+
+        js_path = tmp_path / "shape.js"
+        js_path.write_text("// empty file")
+
+        with pytest.raises(io.UnsupportedOperation):
+            with open(js_path, "r") as out_file:
+                write_js(out_file, value=red_pentagon, varname="redPentagon")
+
+    def test_throws_typeerror_if_cannot_write(self) -> None:
+        """
+        Writing to something that can't be written to throws a ``TypeError``.
+        """
+        red_pentagon = {"sides": 5, "colour": "red"}
+
+        with pytest.raises(TypeError):
+            write_js(
+                ["this", "is", "not", "a", "file"],  # type: ignore
+                value=red_pentagon,
+                varname="redPentagon",
+            )
 
     def test_fails_if_cannot_write_file(self) -> None:
         """

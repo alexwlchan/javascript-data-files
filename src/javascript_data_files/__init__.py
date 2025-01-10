@@ -11,6 +11,7 @@ Think of this like the JSON module, but for JavaScript files.
 
 """
 
+import io
 import json
 import pathlib
 import re
@@ -19,7 +20,7 @@ import typing
 import uuid
 
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 
 def read_js(p: pathlib.Path | str, *, varname: str) -> typing.Any:
@@ -52,9 +53,26 @@ def read_js(p: pathlib.Path | str, *, varname: str) -> typing.Any:
     return json.loads(json_string)
 
 
-def write_js(p: pathlib.Path | str, *, value: typing.Any, varname: str) -> None:
+def _create_js_string(value: typing.Any, varname: str) -> str:
+    """
+    Create a JavaScript string to write to a file.
+    """
+    json_string = json.dumps(value, indent=2)
+    js_string = f"const {varname} = {json_string};\n"
+
+    return js_string
+
+
+def write_js(
+    p: pathlib.Path | str | io.TextIOBase | io.BufferedIOBase,
+    *,
+    value: typing.Any,
+    varname: str,
+) -> None:
     """
     Write a JavaScript "data file".
+
+    You can pass a path-like or file-like object as the first parameter ``p``.
 
     Example:
 
@@ -64,35 +82,41 @@ def write_js(p: pathlib.Path | str, *, value: typing.Any, varname: str) -> None:
         'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
 
     """
-    p = pathlib.Path(p)
+    js_string = _create_js_string(value, varname)
 
-    if p.is_dir():
-        raise IsADirectoryError(p)
+    if isinstance(p, io.TextIOBase):
+        p.write(js_string)
+    elif isinstance(p, io.BufferedIOBase):
+        p.write(js_string.encode("utf8"))
+    elif isinstance(p, pathlib.Path) or isinstance(p, str):
+        p = pathlib.Path(p)
 
-    json_string = json.dumps(value, indent=2)
-    js_string = f"const {varname} = {json_string};\n"
+        if p.is_dir():
+            raise IsADirectoryError(p)
 
-    p.parent.mkdir(exist_ok=True, parents=True)
+        p.parent.mkdir(exist_ok=True, parents=True)
 
-    # Write to a temporary file first, then rename this into place.
-    #
-    # This gives us pseudo-atomic writes -- it's probably not perfect, but
-    # it avoids situations where:
-    #
-    #   * Somebody tries to read the file, and it contains a partial JS string
-    #   * The write is interrupted, and the file is left empty
-    #
-    # Both of which have happened!  Because I often use this running on
-    # files on a semi-slow external hard drive, and sometimes things break.
-    #
-    # The UUID is probably overkill because it would be very unusual for
-    # me to have multiple, concurrent writes going on, but it doesn't hurt.
-    tmp_p = p.with_suffix(f".{uuid.uuid4()}.js.tmp")
+        # Write to a temporary file first, then rename this into place.
+        #
+        # This gives us pseudo-atomic writes -- it's probably not perfect, but
+        # it avoids situations where:
+        #
+        #   * Somebody tries to read the file, and it contains a partial JS string
+        #   * The write is interrupted, and the file is left empty
+        #
+        # Both of which have happened!  Because I often use this running on
+        # files on a semi-slow external hard drive, and sometimes things break.
+        #
+        # The UUID is probably overkill because it would be very unusual for
+        # me to have multiple, concurrent writes going on, but it doesn't hurt.
+        tmp_p = p.with_suffix(f".{uuid.uuid4()}.js.tmp")
 
-    with tmp_p.open("x") as out_file:
-        out_file.write(js_string)
+        with tmp_p.open("x") as out_file:
+            out_file.write(js_string)
 
-    tmp_p.rename(p)
+        tmp_p.rename(p)
+    else:
+        raise TypeError(f"Cannot write JavaScript to {type(p)}!")
 
 
 def append_to_js_array(p: pathlib.Path | str, *, value: typing.Any) -> None:
