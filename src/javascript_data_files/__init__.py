@@ -19,10 +19,10 @@ import textwrap
 import typing
 import uuid
 
-from .encoder import encode_as_js
+from .encoder import encode_as_js, encode_as_json
 
 
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 
 
 def read_js(p: pathlib.Path | str, *, varname: str) -> typing.Any:
@@ -131,7 +131,7 @@ def append_to_js_array(p: pathlib.Path | str, *, value: typing.Any) -> None:
 
     json_to_append = (
         b",\n"
-        + textwrap.indent(json.dumps(value, indent=2), prefix="  ").encode("utf8")
+        + textwrap.indent(encode_as_json(value), prefix="  ").encode("utf8")
         + b"\n];\n"
     )
 
@@ -183,7 +183,7 @@ def append_to_js_object(p: pathlib.Path | str, *, key: str, value: typing.Any) -
     file_size = p.stat().st_size
 
     enc_key = json.dumps(key)
-    enc_value = textwrap.indent(json.dumps(value, indent=2), prefix="  ").lstrip()
+    enc_value = textwrap.indent(encode_as_json(value), prefix="  ").lstrip()
 
     json_to_append = f",\n  {enc_key}: {enc_value}\n}};\n".encode("utf8")
 
