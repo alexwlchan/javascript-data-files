@@ -340,6 +340,26 @@ class TestAppendToArray:
         with pytest.raises(IsADirectoryError):
             append_to_js_array(tmp_path, value="alex")
 
+    def test_indentation_is_consistent(self, tmp_path: pathlib.Path) -> None:
+        """
+        If you append to an array, the file looks as if you'd read and rewritten
+        the whole thing with ``write_js()``.
+        """
+        js_path1 = tmp_path / "data1.js"
+        js_path2 = tmp_path / "data2.js"
+
+        # We use deliberately large value, so they won't be compressed
+        # by the custom encoder.
+        value = ["1" * 10, "2" * 20, "3" * 30]
+        appended_value = ["4" * 40, "5" * 50, "6" * 60]
+
+        write_js(js_path1, varname="numbers", value=value)
+        append_to_js_array(js_path1, value=appended_value)
+
+        write_js(js_path2, varname="numbers", value=value + [appended_value])
+
+        assert js_path1.read_text() == js_path2.read_text()
+
 
 class TestAppendToObject:
     """
@@ -374,6 +394,29 @@ class TestAppendToObject:
             "sides": 5,
             "sideLengths": [1, 2, 3, 4, 5],
         }
+
+    def test_indentation_is_consistent(self, tmp_path: pathlib.Path) -> None:
+        """
+        If you append to an object, the file looks as if you'd read and
+        rewritten the whole thing with ``write_js()``.
+        """
+        js_path1 = tmp_path / "data1.js"
+        js_path2 = tmp_path / "data2.js"
+
+        # We pick a deliberately large value, so it won't be compressed
+        # by the custom encoder.
+        value = ["1" * 10, "2" * 20, "3" * 30]
+
+        write_js(js_path1, varname="shape", value={"colour": "red"})
+        append_to_js_object(js_path1, key="sides", value=value)
+
+        write_js(
+            js_path2,
+            varname="shape",
+            value={"colour": "red", "sides": value},
+        )
+
+        assert js_path1.read_text() == js_path2.read_text()
 
     def test_error_if_file_doesnt_look_like_object(self, js_path: pathlib.Path) -> None:
         """
