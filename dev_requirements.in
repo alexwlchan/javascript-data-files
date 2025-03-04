@@ -1,4 +1,4 @@
--e file:.[validate_types]
+-e file:.[typed]
 
 build
 interrogate

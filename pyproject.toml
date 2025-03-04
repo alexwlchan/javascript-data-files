@@ -24,7 +24,7 @@ dependencies = []
 dynamic = ["version"]
 
 [project.optional-dependencies]
-validate_types = ["pydantic"]
+typed = ["pydantic"]
 
 [project.urls]
 "Homepage" = "https://github.com/alexwlchan/python-js-files"
