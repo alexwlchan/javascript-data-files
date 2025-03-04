@@ -23,6 +23,9 @@ requires-python = ">=3.12"
 dependencies = []
 dynamic = ["version"]
 
+[project.optional-dependencies]
+validate_types = ["pydantic"]
+
 [project.urls]
 "Homepage" = "https://github.com/alexwlchan/python-js-files"
 "Changelog" = "https://github.com/alexwlchan/python-js-files/blob/main/CHANGELOG.md"
