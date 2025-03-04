@@ -4,58 +4,57 @@
     # via -r dev_requirements.in
 annotated-types==0.7.0
     # via pydantic
-attrs==24.2.0
+attrs==25.1.0
     # via interrogate
-build==1.2.1
+build==1.2.2.post1
     # via -r dev_requirements.in
-certifi==2024.7.4
+certifi==2025.1.31
     # via requests
-charset-normalizer==3.3.2
+charset-normalizer==3.4.1
     # via requests
-click==8.1.7
+click==8.1.8
     # via interrogate
 colorama==0.4.6
     # via interrogate
-coverage==7.6.1
+coverage==7.6.12
     # via pytest-cov
 docutils==0.21.2
     # via readme-renderer
-idna==3.7
-    # via requests
-importlib-metadata==8.2.0
+id==1.5.0
     # via twine
+idna==3.10
+    # via requests
 iniconfig==2.0.0
     # via pytest
 interrogate==1.7.0
     # via -r dev_requirements.in
 jaraco-classes==3.4.0
     # via keyring
-jaraco-context==5.3.0
+jaraco-context==6.0.1
     # via keyring
-jaraco-functools==4.0.2
+jaraco-functools==4.1.0
     # via keyring
-keyring==25.3.0
+keyring==25.6.0
     # via twine
 markdown-it-py==3.0.0
     # via rich
 mdurl==0.1.2
     # via markdown-it-py
-more-itertools==10.4.0
+more-itertools==10.6.0
     # via
     #   jaraco-classes
     #   jaraco-functools
-mypy==1.11.1
+mypy==1.15.0
     # via -r dev_requirements.in
 mypy-extensions==1.0.0
     # via mypy
-nh3==0.2.18
+nh3==0.2.21
     # via readme-renderer
-packaging==24.1
+packaging==24.2
     # via
     #   build
     #   pytest
-pkginfo==1.10.0
-    # via twine
+    #   twine
 pluggy==1.5.0
     # via pytest
 py==1.11.0
@@ -64,42 +63,41 @@ pydantic==2.10.6
     # via javascript-data-files
 pydantic-core==2.27.2
     # via pydantic
-pygments==2.18.0
+pygments==2.19.1
     # via
     #   readme-renderer
     #   rich
-pyproject-hooks==1.1.0
+pyproject-hooks==1.2.0
     # via build
-pytest==8.3.2
+pytest==8.3.5
     # via pytest-cov
-pytest-cov==5.0.0
+pytest-cov==6.0.0
     # via -r dev_requirements.in
 readme-renderer==44.0
     # via twine
 requests==2.32.3
     # via
+    #   id
     #   requests-toolbelt
     #   twine
 requests-toolbelt==1.0.0
     # via twine
 rfc3986==2.0.0
     # via twine
-rich==13.7.1
+rich==13.9.4
     # via twine
-ruff==0.6.1
+ruff==0.9.9
     # via -r dev_requirements.in
 tabulate==0.9.0
     # via interrogate
-twine==5.1.1
+twine==6.1.0
     # via -r dev_requirements.in
 typing-extensions==4.12.2
     # via
     #   mypy
     #   pydantic
     #   pydantic-core
-urllib3==2.2.2
+urllib3==2.3.0
     # via
     #   requests
     #   twine
-zipp==3.20.0
-    # via importlib-metadata
