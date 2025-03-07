@@ -6,12 +6,14 @@ import io
 import pathlib
 import typing
 
+import pydantic
 import pytest
 
 from javascript_data_files import (
     append_to_js_array,
     append_to_js_object,
     read_js,
+    read_typed_js,
     write_js,
 )
 
@@ -93,6 +95,57 @@ class TestReadJs:
             ValueError, match="does not start with JavaScript `const` declaration"
         ):
             read_js(js_path, varname="blueTriangle")
+
+
+class TestReadTypedJs:
+    """
+    Tests for the ``read_typed_js()`` function.
+    """
+
+    def test_matches_model(self, js_path: pathlib.Path) -> None:
+        """
+        If the data matches the model, it's read correctly.
+        """
+        js_path.write_text(
+            'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
+        )
+
+        Shape = typing.TypedDict("Shape", {"sides": int, "colour": str})
+
+        shape = read_typed_js(js_path, varname="redPentagon", model=Shape)
+
+        assert shape == {"sides": 5, "colour": "red"}
+
+    def test_does_not_match_model(self, js_path: pathlib.Path) -> None:
+        """
+        If the data does not match the model, it throws a ValidationError.
+        """
+        js_path.write_text(
+            'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
+        )
+
+        Vehicle = typing.TypedDict("Vehicle", {"wheels": int, "colour": str})
+
+        with pytest.raises(pydantic.ValidationError):
+            read_typed_js(js_path, varname="redPentagon", model=Vehicle)
+
+    def test_can_read_int(self, js_path: pathlib.Path) -> None:
+        """
+        It can read typed data which is an int.
+        """
+        js_path.write_text("const theAnswer = 42;\n")
+
+        answer = read_typed_js(js_path, varname="theAnswer", model=int)
+        assert answer == 42
+
+    def test_can_read_list_int(self, js_path: pathlib.Path) -> None:
+        """
+        It can read typed data which is an int.
+        """
+        js_path.write_text("const diceValues = [1,2,3,4,5,6];\n")
+
+        answer = read_typed_js(js_path, varname="diceValues", model=list[int])
+        assert answer == [1, 2, 3, 4, 5, 6]
 
 
 class TestWriteJs:

@@ -25,6 +25,9 @@ from .encoder import encode_as_js, encode_as_json
 __version__ = "1.1.1"
 
 
+T = typing.TypeVar("T")
+
+
 def read_js(p: pathlib.Path | str, *, varname: str) -> typing.Any:
     """
     Read a JavaScript "data file".
@@ -53,6 +56,21 @@ def read_js(p: pathlib.Path | str, *, varname: str) -> typing.Any:
     json_string = m.sub(repl="", string=contents).rstrip().rstrip(";")
 
     return json.loads(json_string)
+
+
+def read_typed_js[T](p: pathlib.Path | str, *, varname: str, model: type[T]) -> T:
+    """
+    Read a JavaScript "data file".
+
+    This will validate the contents of the data file against the type
+    you provide, and will throw a ``pydantic.ValidationError`` if the
+    contents does not match the specified type.
+    """
+    from .validate_type import validate_type
+
+    data = read_js(p, varname=varname)
+
+    return validate_type(data, model=model)
 
 
 def write_js(

@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## v1.2.0
+
+This adds a new function `read_typed_js`, which is like `read_js` but will additionally validate the data against a type you specify.
+
+*   `read_js()` returns `typing.Any`, and will always return something if the file contains valid JSON
+*   `read_typed_js` returns `T`, where `T` is the type you specify as `model`.
+    This will only return if the file contains JSON that matches the type, and otherwise it will throw a `pydantic.ValidationError`.
+
+This is useful if you want to check your data or you write typed Python.
+
+You need to install the typed extra to get this function, i.e. `pip install javascript-data-files[typed]`.
+
 ## v1.1.1
 
 Tweak the way the JavaScript is encoded to make it slightly more compact and readable -- in particular, short lists will now be encoded as a single line, rather than split across multiple lines.
