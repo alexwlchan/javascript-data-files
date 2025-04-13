@@ -1,6 +1,32 @@
 # CHANGELOG
 
-## v1.2.0
+## v1.2.1 - 2025-04-13
+
+Fix a bug in the validation of `typing.Union[A, B]` where both types are a `TypedDict`.
+
+The validation is stricter, and will require an exact match to either `A` or `B` -- previously it was possible for data to validate that was only a "partial" match, and this could cause data to be lost.
+This was only possible in cases where the fields of `A` were a strict subset of the fields of `B`, and you passed a value which used more fields than `A` but less than `B`.
+
+For example, consider the following type:
+
+```python
+BasicShape = typing.TypedDict("Shape", {"sides": int, })
+NamedShape = typing.TypedDict("Shape", {"sides": int, "colour": str, "name": str })
+
+Shape = BasicShape | NamedShape
+```
+
+if you passed the data:
+
+```javascript
+const shape = {"sides": "5", "colour": "red"};
+```
+
+this isn't a strict match for `BasicShape` or `NamedShape`, but would be incorrectly validated and returned as `{'sides': 5}`.
+
+Now this throws a `pydantic.ValidationError`.
+
+## v1.2.0 - 2025-03-07
 
 This adds a new function `read_typed_js`, which is like `read_js` but will additionally validate the data against a type you specify.
 
@@ -12,7 +38,7 @@ This is useful if you want to check your data or you write typed Python.
 
 You need to install the typed extra to get this function, i.e. `pip install javascript-data-files[typed]`.
 
-## v1.1.1
+## v1.1.1 - 2025-01-10
 
 Tweak the way the JavaScript is encoded to make it slightly more compact and readable -- in particular, short lists will now be encoded as a single line, rather than split across multiple lines.
 
