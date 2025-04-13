@@ -22,7 +22,7 @@ import uuid
 from .encoder import encode_as_js, encode_as_json
 
 
-__version__ = "1.2.0"
+__version__ = "1.2.1"
 
 
 T = typing.TypeVar("T")
