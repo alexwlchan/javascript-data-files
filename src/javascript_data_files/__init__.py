@@ -22,7 +22,14 @@ from .decoder import decode_from_js
 from .encoder import encode_as_js, encode_as_json
 
 
-__version__ = "1.2.1"
+__version__ = "1.2.2"
+__all__ = [
+    "read_js",
+    "read_typed_js",
+    "write_js",
+    "append_to_js_array",
+    "append_to_js_object",
+]
 
 
 T = typing.TypeVar("T")

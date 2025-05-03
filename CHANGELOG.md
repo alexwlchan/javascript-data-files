@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## v1.2.2 - 2025-05-03
+
+Duplicate keys in JSON objects are now rejected as an error.
+
+For example, consider the following JavaScript:
+
+```javascript
+const shape = {"sides": "5", "colour": "red", "sides": 4};
+```
+
+These duplicate keys are technically allowed by the JSON specification, but are always a mistake when I encounter them.
+Many JSON parsers will silently drop the first instance of `sides`, including both Python's and web browsers.
+
+Previously `read_js` would read this file and silently drop the first key, but now it throws a `ValueError` and prompts you to de-duplicate the key.
+
 ## v1.2.1 - 2025-04-13
 
 Fix a bug in the validation of `typing.Union[A, B]` where both types are a `TypedDict`.
