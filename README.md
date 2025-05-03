@@ -45,6 +45,10 @@ This is the only way to load data from an external file from an HTML file you've
 I have a lot of HTML files and local sites I build with an HTML viewer and metadata in a JavaScript file.
 The convenience of this approach outweighs the mild annoyance of having to store data in JavaScript, not JSON.
 
+## Development
+
+If you want to make changes to the library, there are instructions in [CONTRIBUTING.md](./CONTRIBUTING.md).
+
 ## License
 
 MIT.

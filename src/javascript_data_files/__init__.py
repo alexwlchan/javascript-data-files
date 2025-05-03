@@ -14,15 +14,22 @@ Think of this like the JSON module, but for JavaScript files.
 import io
 import json
 import pathlib
-import re
 import textwrap
 import typing
 import uuid
 
+from .decoder import decode_from_js
 from .encoder import encode_as_js, encode_as_json
 
 
-__version__ = "1.2.1"
+__version__ = "1.2.2"
+__all__ = [
+    "read_js",
+    "read_typed_js",
+    "write_js",
+    "append_to_js_array",
+    "append_to_js_object",
+]
 
 
 T = typing.TypeVar("T")
@@ -44,18 +51,7 @@ def read_js(p: pathlib.Path | str, *, varname: str) -> typing.Any:
     """
     p = pathlib.Path(p)
 
-    contents = p.read_text()
-
-    m = re.compile(r"^(?:const |var )?%s = " % varname)
-
-    if not m.match(contents):
-        raise ValueError(
-            f"File {p} does not start with JavaScript `const` declaration!"
-        )
-
-    json_string = m.sub(repl="", string=contents).rstrip().rstrip(";")
-
-    return json.loads(json_string)
+    return decode_from_js(js_string=p.read_text(), varname=varname)
 
 
 def read_typed_js[T](p: pathlib.Path | str, *, varname: str, model: type[T]) -> T:

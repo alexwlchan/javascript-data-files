@@ -92,7 +92,7 @@ class TestReadJs:
         )
 
         with pytest.raises(
-            ValueError, match="does not start with JavaScript `const` declaration"
+            ValueError, match="Does not start with JavaScript `const` declaration"
         ):
             read_js(js_path, varname="blueTriangle")
 
