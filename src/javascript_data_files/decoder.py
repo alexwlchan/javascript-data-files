@@ -28,13 +28,15 @@ def decode_from_js(js_string: str, *, varname: str) -> typing.Any:
     return decode_from_json(json_string)
 
 
-def _parse_object_pairs(pairs: list[tuple[str, typing.Any]]) -> dict[str, typing.Any]:
+def dict_with_unique_names(
+    pairs: list[tuple[str, typing.Any]],
+) -> dict[str, typing.Any]:
     """
-    Convert any object literal into a dict.  This receives a list of
-    key-value pairs and returns a dict.
+    Convert a list of name/value pairs to a dict, but only if the
+    names are unique.
 
     This is similar to the builtin parser, but it will look for
-    duplicate keys and throw a ValueError if they're found; this is
+    duplicate names and throw a ValueError if they're found; this is
     a protection against me making a copy/paste error in my JavaScript.
     """
     # First try to parse the object as a dictionary; if it's the same
@@ -45,20 +47,20 @@ def _parse_object_pairs(pairs: list[tuple[str, typing.Any]]) -> dict[str, typing
     if len(pairs_as_dict) == len(pairs):
         return pairs_as_dict
 
-    # Otherwise, let's work out what the duplicate key(s) were, so we
+    # Otherwise, let's work out what the duplicate name(s) were, so we
     # can throw an appropriate error message for the user.
     import collections
 
-    key_tally = collections.Counter(k for k, _ in pairs)
+    name_tally = collections.Counter(k for k, _ in pairs)
 
-    duplicate_keys = [k for k, count in key_tally.items() if count > 1]
-    assert len(duplicate_keys) > 0
+    duplicate_names = [k for k, count in name_tally.items() if count > 1]
+    assert len(duplicate_names) > 0
 
-    if len(duplicate_keys) == 1:
-        raise ValueError(f"Found duplicate key in JSON object: {duplicate_keys[0]}")
+    if len(duplicate_names) == 1:
+        raise ValueError(f"Found duplicate name in JSON object: {duplicate_names[0]}")
     else:
         raise ValueError(
-            f"Found duplicate keys in JSON object: {', '.join(duplicate_keys)}"
+            f"Found duplicate names in JSON object: {', '.join(duplicate_names)}"
         )
 
 
@@ -66,4 +68,4 @@ def decode_from_json(json_string: str) -> typing.Any:
     """
     Parse a string as a JSON value.
     """
-    return json.loads(json_string, object_pairs_hook=_parse_object_pairs)
+    return json.loads(json_string, object_pairs_hook=dict_with_unique_names)

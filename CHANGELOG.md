@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.2.3 - 2025-05-04
+
+Tweak the error message introduced in v1.2.2 -- JSON objects are **name**/value pairs, not key/value pairs.
+
 ## v1.2.2 - 2025-05-03
 
 Duplicate keys in JSON objects are now rejected as an error.
