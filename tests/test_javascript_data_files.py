@@ -153,7 +153,7 @@ class TestWriteJs:
     Tests for the ``write_js()`` function.
     """
 
-    def test_can_write_file(self, js_path: pathlib.Path) -> None:
+    def test_write_file(self, js_path: pathlib.Path) -> None:
         """
         Writing to a file stores the correct JavaScript string.
         """
@@ -166,7 +166,7 @@ class TestWriteJs:
             == 'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
         )
 
-    def test_can_write_to_str(self, tmp_path: pathlib.Path) -> None:
+    def test_write_to_str(self, tmp_path: pathlib.Path) -> None:
         """
         It can write to a path passed as a ``str``.
         """
@@ -181,7 +181,7 @@ class TestWriteJs:
             == 'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
         )
 
-    def test_can_write_to_path(self, tmp_path: pathlib.Path) -> None:
+    def test_write_to_path(self, tmp_path: pathlib.Path) -> None:
         """
         It can write to a path passed as a ``pathlib.Path``.
         """
@@ -196,7 +196,7 @@ class TestWriteJs:
             == 'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
         )
 
-    def test_can_write_to_file(self, tmp_path: pathlib.Path) -> None:
+    def test_write_to_file(self, tmp_path: pathlib.Path) -> None:
         """
         It can write to a file.
         """
@@ -212,7 +212,7 @@ class TestWriteJs:
             == 'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
         )
 
-    def test_can_write_to_binary_file(self, tmp_path: pathlib.Path) -> None:
+    def test_write_to_binary_file(self, tmp_path: pathlib.Path) -> None:
         """
         It can write to a file opened in binary mode.
         """
@@ -228,7 +228,7 @@ class TestWriteJs:
             == 'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
         )
 
-    def test_can_write_to_string_buffer(self) -> None:
+    def test_write_to_string_buffer(self) -> None:
         """
         It can write to a string buffer.
         """
@@ -243,7 +243,7 @@ class TestWriteJs:
             == 'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
         )
 
-    def test_can_write_to_bytes_buffer(self) -> None:
+    def test_write_to_bytes_buffer(self) -> None:
         """
         It can write to a binary buffer.
         """
