@@ -17,6 +17,21 @@ def test_it_pretty_prints_json() -> None:
     )
 
 
+def test_it_sorts_keys() -> None:
+    """
+    If you pass `sort_keys=True`, it sorts the keys in JSON objects.
+    """
+    assert (
+        encode_as_json({"sides": 5, "colour": "red"}, sort_keys=False)
+        == '{\n  "sides": 5,\n  "colour": "red"\n}'
+    )
+
+    assert (
+        encode_as_json({"sides": 5, "colour": "red"}, sort_keys=True)
+        == '{\n  "colour": "red",\n  "sides": 5\n}'
+    )
+
+
 def test_a_list_of_ints_is_not_split_over_multiple_lines() -> None:
     """
     If there's a list of small integers, they're printed on one line

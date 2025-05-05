@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.3.0 - 2025-05-05
+
+Add a `sort_keys` parameter to `write_js`.
+If `True`, dictionaries with be serialised to JSON sorted by key.
+Default `False`.
+
 ## v1.2.3 - 2025-05-04
 
 Tweak the error message introduced in v1.2.2 -- JSON objects are **name**/value pairs, not key/value pairs.
