@@ -258,6 +258,32 @@ class TestWriteJs:
             == b'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
         )
 
+    def test_write_with_sort_keys(self, tmp_path: pathlib.Path) -> None:
+        """
+        If you pass `sort_keys=True`, it sorts the keys in JSON objects.
+        """
+        red_pentagon = {"sides": 5, "colour": "red"}
+
+        unsorted_path = tmp_path / "unsorted.js"
+        sorted_path = tmp_path / "sorted.js"
+
+        write_js(
+            unsorted_path,
+            value=red_pentagon,
+            varname="redPentagon",
+            sort_keys=False,
+        )
+        assert (
+            unsorted_path.read_text()
+            == 'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
+        )
+
+        write_js(sorted_path, value=red_pentagon, varname="redPentagon", sort_keys=True)
+        assert (
+            sorted_path.read_text()
+            == 'const redPentagon = {\n  "colour": "red",\n  "sides": 5\n};\n'
+        )
+
     def test_fails_if_file_is_read_only(self, tmp_path: pathlib.Path) -> None:
         """
         It cannot write to a file open in read-only mode.

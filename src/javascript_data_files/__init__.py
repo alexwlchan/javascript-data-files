@@ -74,6 +74,7 @@ def write_js(
     *,
     value: typing.Any,
     varname: str,
+    sort_keys: bool = False,
 ) -> None:
     """
     Write a JavaScript "data file".
@@ -88,7 +89,7 @@ def write_js(
         'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
 
     """
-    js_string = encode_as_js(value, varname)
+    js_string = encode_as_js(value, varname, sort_keys=sort_keys)
 
     if isinstance(p, io.TextIOBase):
         p.write(js_string)
