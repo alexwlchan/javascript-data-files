@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.4.0 - 2025-07-21
+
+Add top-level functions `encode_as_js` and `decode_from_js`, which operate on pure strings.
+
 ## v1.3.0 - 2025-05-05
 
 Add a `sort_keys` parameter to `write_js`.
