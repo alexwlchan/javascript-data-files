@@ -26,18 +26,32 @@ class HumanReadableEncoder(json.JSONEncoder):
         return super().encode(o)
 
 
-def encode_as_json(value: typing.Any, *, sort_keys: bool = False) -> str:
+def encode_as_json(
+    value: typing.Any, *, ensure_ascii: bool = False, sort_keys: bool = False
+) -> str:
     """
     Convert a Python value to a JSON-encoded string.
     """
-    return json.dumps(value, indent=2, sort_keys=sort_keys, cls=HumanReadableEncoder)
+    return json.dumps(
+        value,
+        indent=2,
+        sort_keys=sort_keys,
+        ensure_ascii=ensure_ascii,
+        cls=HumanReadableEncoder,
+    )
 
 
-def encode_as_js(value: typing.Any, varname: str, *, sort_keys: bool = False) -> str:
+def encode_as_js(
+    value: typing.Any,
+    varname: str,
+    *,
+    ensure_ascii: bool = False,
+    sort_keys: bool = False,
+) -> str:
     """
     Convert a Python value to a JSON-encoded JavaScript value.
     """
-    json_string = encode_as_json(value, sort_keys=sort_keys)
+    json_string = encode_as_json(value, ensure_ascii=ensure_ascii, sort_keys=sort_keys)
     js_string = f"const {varname} = {json_string};\n"
 
     return js_string
