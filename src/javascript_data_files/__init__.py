@@ -22,7 +22,7 @@ from .decoder import decode_from_js
 from .encoder import encode_as_js, encode_as_json
 
 
-__version__ = "1.4.0"
+__version__ = "1.4.1"
 __all__ = [
     "read_js",
     "read_typed_js",

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.4.1 - 2025-08-15
+
+Fix the yanked v1.4.0 release, and make sure it includes the correct code.
+
 ## v1.4.0 - 2025-08-15
 
 Add an `ensure_ascii` parameter to `write_js`.
