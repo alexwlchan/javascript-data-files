@@ -4,7 +4,7 @@ Tests for ``javascript_data_files.encoder``.
 
 import string
 
-from javascript_data_files.encoder import encode_as_json
+from javascript_data_files.encoder import encode_as_json, encode_as_js
 
 
 def test_it_pretty_prints_json() -> None:
@@ -30,6 +30,38 @@ def test_it_sorts_keys() -> None:
         encode_as_json({"sides": 5, "colour": "red"}, sort_keys=True)
         == '{\n  "colour": "red",\n  "sides": 5\n}'
     )
+
+
+class TestEnsureAscii:
+    """
+    Tests for the `ensure_ascii` parameter.
+    """
+
+    s = "“hello world”"
+    varname = "greeting"
+
+    js_as_utf8 = 'const greeting = "“hello world”";\n'
+    js_as_ascii = 'const greeting = "\\u201chello world\\u201d";\n'
+
+    def test_default_is_utf8(self) -> None:
+        """
+        If you don't pass a value for `ensure_ascii`, then we allow
+        UTF-8 in the output.
+        """
+        assert encode_as_js(self.s, self.varname) == self.js_as_utf8
+
+    def test_explicit_utf8(self) -> None:
+        """
+        If you pass `ensure_ascii=False`, then we allow UTF-8 in the output.
+        """
+        assert encode_as_js(self.s, self.varname, ensure_ascii=False) == self.js_as_utf8
+
+    def test_explicit_ascii(self) -> None:
+        """
+        If you pass `ensure_ascii=True`, then we only return ASCII
+        in the output.
+        """
+        assert encode_as_js(self.s, self.varname, ensure_ascii=True) == self.js_as_ascii
 
 
 def test_a_list_of_ints_is_not_split_over_multiple_lines() -> None:

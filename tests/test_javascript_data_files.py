@@ -284,6 +284,25 @@ class TestWriteJs:
             == 'const redPentagon = {\n  "colour": "red",\n  "sides": 5\n};\n'
         )
 
+    @pytest.mark.parametrize(
+        "ensure_ascii, expected_js",
+        [
+            (False, 'const greeting = "“hello world”";\n'),
+            (True, 'const greeting = "\\u201chello world\\u201d";\n'),
+        ],
+    )
+    def test_write_with_ensure_ascii(
+        self, tmp_path: pathlib.Path, ensure_ascii: bool, expected_js: str
+    ) -> None:
+        """
+        You can pass an `ensure_ascii`  parameter.
+        """
+        p = tmp_path / "ascii.js"
+        write_js(
+            p, value="“hello world”", varname="greeting", ensure_ascii=ensure_ascii
+        )
+        assert p.read_text() == expected_js
+
     def test_fails_if_file_is_read_only(self, tmp_path: pathlib.Path) -> None:
         """
         It cannot write to a file open in read-only mode.

@@ -22,7 +22,7 @@ from .decoder import decode_from_js
 from .encoder import encode_as_js, encode_as_json
 
 
-__version__ = "1.3.0"
+__version__ = "1.4.0"
 __all__ = [
     "read_js",
     "read_typed_js",
@@ -74,6 +74,7 @@ def write_js(
     *,
     value: typing.Any,
     varname: str,
+    ensure_ascii: bool = False,
     sort_keys: bool = False,
 ) -> None:
     """
@@ -89,7 +90,9 @@ def write_js(
         'const redPentagon = {\n  "sides": 5,\n  "colour": "red"\n};\n'
 
     """
-    js_string = encode_as_js(value, varname, sort_keys=sort_keys)
+    js_string = encode_as_js(
+        value, varname, ensure_ascii=ensure_ascii, sort_keys=sort_keys
+    )
 
     if isinstance(p, io.TextIOBase):
         p.write(js_string)

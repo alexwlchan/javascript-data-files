@@ -1,10 +1,35 @@
 # CHANGELOG
 
+## v1.4.0 - 2025-08-15
+
+Add an `ensure_ascii` parameter to `write_js`.
+If `True`, all incoming ASCII characters will be escaped, otherwise they will be left as-is.
+Default is `False`.
+
+This changes the default output of `write_js`.
+Before, it would escape any incoming ASCII characters, for example `“hello world”` would be encoded as:
+
+```json
+"\u201chello world\u201d"
+```
+
+With the new behaviour, it will be encoded as:
+
+```json
+“hello world”
+```
+
+unless you explicitly pass `ensure_ascii=True`.
+
+This mirrors the parameter on the builtin `json.dumps()`, but with a different default.
+
 ## v1.3.0 - 2025-05-05
 
 Add a `sort_keys` parameter to `write_js`.
 If `True`, dictionaries with be serialised to JSON sorted by key.
 Default `False`.
+
+This mirrors the parameter on the builtin `json.dumps()`.
 
 ## v1.2.3 - 2025-05-04
 
