@@ -1,8 +1,7 @@
 -e file:.[typed]
 
-build
 interrogate
+keyring
 mypy
 pytest-cov
 ruff
-twine
