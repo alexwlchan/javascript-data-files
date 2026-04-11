@@ -6,7 +6,7 @@ annotated-types==0.7.0
     # via pydantic
 attrs==26.1.0
     # via interrogate
-click==8.3.1
+click==8.3.2
     # via interrogate
 colorama==0.4.6
     # via interrogate
@@ -16,20 +16,8 @@ iniconfig==2.3.0
     # via pytest
 interrogate==1.7.0
     # via -r dev_requirements.in
-jaraco-classes==3.4.0
-    # via keyring
-jaraco-context==6.1.2
-    # via keyring
-jaraco-functools==4.4.0
-    # via keyring
-keyring==25.7.0
-    # via -r dev_requirements.in
 librt==0.8.1
     # via mypy
-more-itertools==11.0.1
-    # via
-    #   jaraco-classes
-    #   jaraco-functools
 mypy==1.20.0
     # via -r dev_requirements.in
 mypy-extensions==1.1.0
