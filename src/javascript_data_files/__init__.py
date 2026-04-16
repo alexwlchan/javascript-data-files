@@ -1,7 +1,6 @@
 """
-This is a collection of Python functions for manipulating JavaScript
-"data files" -- that is, JavaScript files that define a single variable
-with a JSON value.
+Python functions for manipulating JavaScript "data files" -- that is,
+JavaScript files that define a single variable with a JSON value.
 
 This is an example of a JavaScript data file:
 
@@ -77,13 +76,12 @@ def write_js(
     ensure_ascii: bool = False,
     sort_keys: bool = False,
 ) -> None:
-    """
+    r"""
     Write a JavaScript "data file".
 
     You can pass a path-like or file-like object as the first parameter ``p``.
 
     Example:
-
         >>> red_pentagon = {'sides': 5, 'colour': 'red'}
         >>> write_js('shape.js', value=red_pentagon, varname='redPentagon')
         >>> open('shape.js').read()
@@ -134,7 +132,6 @@ def append_to_js_array(p: pathlib.Path | str, *, value: typing.Any) -> None:
     Append a single value to an array in a JavaScript "data file".
 
     Example:
-
         >>> write_js('food.js', value=['apple', 'banana', 'coconut'], varname='fruit')
         >>> append_to_js_array('food.js', value='damson')
         >>> read_js('food.js', varname='fruit')
@@ -187,8 +184,9 @@ def append_to_js_object(p: pathlib.Path | str, *, key: str, value: typing.Any) -
     Append a single key/value pair to a JSON object in a JavaScript "data file".
 
     Example:
-
-        >>> write_js('shape.js', value={'colour': 'red', 'sides': 5}, varname='redPentagon')
+        >>> write_js('shape.js',
+        ...          value={'colour': 'red', 'sides': 5},
+        ...          varname='redPentagon')
         >>> append_to_js_object('shape.js', key='sideLengths', value=[5, 5, 6, 6, 6])
         >>> read_js('shape.js', varname='redPentagon')
         {'colour': 'red', 'sides': 5, 'sideLengths': [5, 5, 6, 6, 6]}

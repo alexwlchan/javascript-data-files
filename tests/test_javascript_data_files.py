@@ -21,7 +21,7 @@ from javascript_data_files import (
 @pytest.fixture
 def js_path(tmp_path: pathlib.Path) -> pathlib.Path:
     """
-    Returns a path to a JavaScript file.
+    Return a path to a JavaScript file.
 
     This only returns the path and does not create the file.
     """
@@ -45,8 +45,9 @@ class TestReadJs:
     )
     def test_can_read_file(self, js_path: pathlib.Path, text: str) -> None:
         """
-        JavaScript "data values" can be read from files, with a certain
-        amount of allowance for:
+        Test values can be read from a file correctly.
+
+        Test that the parser does not care about:
 
         *   whitespace
         *   trailing semicolon or not

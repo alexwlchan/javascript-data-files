@@ -1,6 +1,5 @@
 """
-This file contains pure functions for converting Python values
-to JavaScript strings.
+Pure functions for converting Python values to JavaScript strings.
 
 We prioritise human-readability over absolute efficiency.
 For example, JSON is nicely indented to be more readable, rather than

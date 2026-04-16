@@ -1,6 +1,5 @@
 -e file:.[typed]
 
-interrogate
 mypy
 pytest-cov
 ruff

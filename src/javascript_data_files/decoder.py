@@ -1,6 +1,5 @@
 """
-This file contains pure functions for converting JSON strings
-to Python values.
+Pure functions for converting JSON strings to Python values.
 
 Because I expect some of this JSON to be written by me, and I can
 make copy-paste mistakes, there are a couple of ways it tries
