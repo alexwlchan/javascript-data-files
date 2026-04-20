@@ -8,16 +8,8 @@ coverage==7.13.5
     # via pytest-cov
 iniconfig==2.3.0
     # via pytest
-librt==0.8.1
-    # via mypy
-mypy==1.20.0
-    # via -r dev_requirements.in
-mypy-extensions==1.1.0
-    # via mypy
 packaging==26.0
     # via pytest
-pathspec==1.0.4
-    # via mypy
 pluggy==1.6.0
     # via
     #   pytest
@@ -32,11 +24,12 @@ pytest==9.0.3
     # via pytest-cov
 pytest-cov==7.1.0
     # via -r dev_requirements.in
-ruff==0.15.9
+ruff==0.15.10
+    # via -r dev_requirements.in
+ty==0.0.29
     # via -r dev_requirements.in
 typing-extensions==4.15.0
     # via
-    #   mypy
     #   pydantic
     #   pydantic-core
     #   typing-inspection

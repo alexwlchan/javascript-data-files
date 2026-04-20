@@ -51,10 +51,6 @@ fail_under = 100
 [tool.pytest.ini_options]
 filterwarnings = ["error"]
 
-[tool.mypy]
-mypy_path = "src"
-strict = true
-
 [tool.ruff.lint]
 select = ["D", "E", "F"]
 ignore = [
