@@ -1,5 +1,0 @@
--e file:.[typed]
-
-pytest-cov
-ruff
-ty
